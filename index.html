@@ -17,13 +17,13 @@
                 <img src="assets/favicon.png" alt="RupertG Logo" class="logo-icon">
                 <h1>RupertG <span>Recipes</span></h1>
             </div>
-            <nav class="nav">
-                <ul>
-                    <li><a href="#recipes">Recipes</a></li>
-                    <li><a href="#recipeSubmission">Submit Recipes</a></li>
-                    <li><a href="https://www.rupertg.co.uk">RupertG Interactive</a></li>
-                </ul>
-            </nav>
+    <nav class="nav">
+        <ul>
+            <li><a href="#recipes">Recipes</a></li>
+            <li><a href="#favorites">Favorites</a></li>
+            <li><a href="#recipeSubmission">Submit Recipes</a></li>
+        </ul>
+    </nav>
             <div class="mobile-menu-toggle">
                 <i class="fas fa-bars"></i>
             </div>
@@ -77,6 +77,20 @@
             <h2 class="section-title">Our Recipes</h2>
             <div id="recipesGrid" class="recipes-grid">
                 <!-- Recipes will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Favorites Section -->
+    <section id="favorites" class="favorites-section">
+        <div class="container">
+            <h2 class="section-title">Your Favorites</h2>
+            <p class="text-center mb-30">Your bookmarked recipes will appear here. Click the heart icon on any recipe to add it to your favorites.</p>
+            <div id="favoritesGrid" class="recipes-grid">
+                <!-- Favorite recipes will be loaded here -->
+            </div>
+            <div id="noFavoritesMessage" class="no-recipes" style="display: none;">
+                <p>You haven't bookmarked any recipes yet. Start exploring and click the heart icon on recipes you love!</p>
             </div>
         </div>
     </section>
