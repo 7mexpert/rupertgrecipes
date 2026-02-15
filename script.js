@@ -210,6 +210,10 @@ function openRecipeModal(recipeId) {
                     <i class="fas fa-download"></i>
                     Download Recipe Sheet
                 </button>
+                <button class="action-btn guide-btn" onclick="openRecipeGuide(${recipe.id})">
+                    <i class="fas fa-play-circle"></i>
+                    Start Cooking Guide
+                </button>
             </div>
 
             <div class="recipe-content-detail">
@@ -258,6 +262,186 @@ function openRecipeModal(recipeId) {
 function closeModal() {
     const modal = document.getElementById('recipeModal');
     modal.style.display = 'none';
+}
+
+function openRecipeGuide(recipeId) {
+    const recipe = recipes.find(r => r.id === recipeId);
+    if (!recipe) return;
+
+    // Store current recipe data for guide
+    window.currentGuideRecipe = recipe;
+    window.currentGuideStep = 0;
+    window.completedIngredients = new Set();
+    
+    // Show guide modal
+    const guideModal = document.getElementById('recipeGuideModal');
+    guideModal.style.display = 'block';
+    
+    // Initialize guide
+    initGuide(recipe);
+}
+
+function initGuide(recipe) {
+    // Update header
+    document.querySelector('.guide-recipe-name').textContent = recipe.title;
+    
+    // Calculate total steps
+    const totalSteps = recipe.steps.length + 2; // +2 for ingredients and equipment
+    document.getElementById('guide-total-steps').textContent = totalSteps;
+    
+    // Show first step
+    showGuideStep(0);
+}
+
+function showGuideStep(stepIndex) {
+    window.currentGuideStep = stepIndex;
+    const stepCard = document.getElementById('guide-step-card');
+    const recipe = window.currentGuideRecipe;
+    
+    // Update progress
+    updateGuideProgress();
+    
+    // Update navigation buttons
+    const backButton = document.getElementById('guide-back-btn');
+    const nextButton = document.getElementById('guide-next-btn');
+    
+    backButton.style.display = stepIndex === 0 ? 'none' : 'flex';
+    
+    // Check if this is the last step (completion step)
+    const isLastStep = stepIndex === getTotalGuideSteps() - 1;
+    
+    if (isLastStep) {
+        nextButton.textContent = 'Done';
+        nextButton.innerHTML = 'Done';
+        nextButton.onclick = function() {
+            exitGuide();
+        };
+    } else {
+        nextButton.textContent = 'Next';
+        nextButton.innerHTML = 'Next <i class="fas fa-arrow-right"></i>';
+        nextButton.onclick = function() {
+            nextGuideStep();
+        };
+    }
+    
+    if (stepIndex === 0) {
+        // Ingredients step
+        stepCard.innerHTML = `
+            <div class="guide-step-icon">
+                <i class="fas fa-shopping-basket"></i>
+            </div>
+            <h2 class="guide-step-title">Gather Ingredients</h2>
+            <p class="guide-step-subtitle">Get all the ingredients ready before you start cooking</p>
+            <div class="guide-ingredients-list">
+                ${recipe.ingredients.map((item, index) => `
+                    <div class="guide-ingredient-item">
+                        <div class="guide-ingredient-checkbox" onclick="toggleGuideIngredient(${index})" id="guide-ingredient-${index}">
+                            <i class="fas fa-check" style="display: none;"></i>
+                        </div>
+                        <div class="guide-ingredient-amount">${item.amount || ''}</div>
+                        <span>${item.item || item}</span>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    } else if (stepIndex === 1) {
+        // Equipment step
+        stepCard.innerHTML = `
+            <div class="guide-step-icon">
+                <i class="fas fa-mortar-pestle"></i>
+            </div>
+            <h2 class="guide-step-title">Prepare Equipment</h2>
+            <p class="guide-step-subtitle">Set up all the tools you'll need</p>
+            <div class="guide-equipment-list">
+                ${recipe.equipment.map(item => `
+                    <div class="guide-equipment-item">
+                        <div class="guide-equipment-icon">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <h4>${item}</h4>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    } else {
+        // Steps step - fix the indexing issue
+        const stepNum = stepIndex - 2; // Changed from stepIndex - 1 to stepIndex - 2
+        const step = recipe.steps[stepNum];
+        
+        if (step) {
+            stepCard.innerHTML = `
+                <div class="guide-step-icon">
+                    <i class="fas fa-cooking"></i>
+                </div>
+                <h2 class="guide-step-title">Step ${stepNum + 1}</h2>
+                <p class="guide-step-subtitle">Follow this step carefully</p>
+                <div class="guide-step-content">
+                    <div class="guide-step-instruction">
+                        <div class="guide-step-number">${stepNum + 1}</div>
+                        <p>${step}</p>
+                    </div>
+                </div>
+            `;
+        } else {
+            // Completion step
+            stepCard.innerHTML = `
+                <div class="guide-step-icon">
+                    <i class="fas fa-check-circle" style="color: #27ae60;"></i>
+                </div>
+                <h2 class="guide-step-title">Recipe Complete! 🎉</h2>
+                <p class="guide-step-subtitle">Great job! You've completed the recipe.</p>
+                <p style="color: #666; margin-top: 20px;">Enjoy your delicious creation!</p>
+            `;
+        }
+    }
+}
+
+function toggleGuideIngredient(index) {
+    const checkbox = document.getElementById(`guide-ingredient-${index}`);
+    if (checkbox.classList.contains('checked')) {
+        checkbox.classList.remove('checked');
+        checkbox.querySelector('i').style.display = 'none';
+        window.completedIngredients.delete(index);
+    } else {
+        checkbox.classList.add('checked');
+        checkbox.querySelector('i').style.display = 'block';
+        window.completedIngredients.add(index);
+    }
+}
+
+function updateGuideProgress() {
+    const totalSteps = getTotalGuideSteps();
+    const currentStep = window.currentGuideStep;
+    const progressFill = document.getElementById('guide-progress-fill');
+    const currentStepDisplay = document.getElementById('guide-current-step');
+    
+    currentStepDisplay.textContent = currentStep + 1;
+    
+    const percentage = ((currentStep + 1) / totalSteps) * 100;
+    progressFill.style.width = percentage + '%';
+}
+
+function getTotalGuideSteps() {
+    const recipe = window.currentGuideRecipe;
+    return recipe.steps.length + 2; // +2 for ingredients and equipment
+}
+
+function nextGuideStep() {
+    const totalSteps = getTotalGuideSteps();
+    if (window.currentGuideStep < totalSteps - 1) {
+        showGuideStep(window.currentGuideStep + 1);
+    }
+}
+
+function prevGuideStep() {
+    if (window.currentGuideStep > 0) {
+        showGuideStep(window.currentGuideStep - 1);
+    }
+}
+
+function exitGuide() {
+    const guideModal = document.getElementById('recipeGuideModal');
+    guideModal.style.display = 'none';
 }
 
 // Search and Filter Functions
