@@ -74,6 +74,128 @@ const recipes = [
 // Global Variables
 let filteredRecipes = [...recipes];
 
+// Favorites Management
+const favoritesKey = 'rupertg_recipes_favorites';
+
+function getFavorites() {
+    const favorites = localStorage.getItem(favoritesKey);
+    return favorites ? JSON.parse(favorites) : [];
+}
+
+function saveFavorites(favorites) {
+    localStorage.setItem(favoritesKey, JSON.stringify(favorites));
+}
+
+function addToFavorites(recipeId) {
+    const favorites = getFavorites();
+    if (!favorites.includes(recipeId)) {
+        favorites.push(recipeId);
+        saveFavorites(favorites);
+        showMessage('Recipe added to favorites!', 'success');
+        updateFavoritesDisplay();
+        updateFavoriteButton(recipeId, true);
+    }
+}
+
+function removeFromFavorites(recipeId) {
+    let favorites = getFavorites();
+    favorites = favorites.filter(id => id !== recipeId);
+    saveFavorites(favorites);
+    showMessage('Recipe removed from favorites!', 'success');
+    updateFavoritesDisplay();
+    updateFavoriteButton(recipeId, false);
+}
+
+function isFavorite(recipeId) {
+    const favorites = getFavorites();
+    return favorites.includes(recipeId);
+}
+
+function toggleFavorite(recipeId) {
+    if (isFavorite(recipeId)) {
+        removeFromFavorites(recipeId);
+    } else {
+        addToFavorites(recipeId);
+    }
+    // Refresh the display to update favorite button colors
+    displayRecipes(filteredRecipes.length > 0 ? filteredRecipes : recipes);
+}
+
+function updateFavoriteButton(recipeId, isActive) {
+    // Update the favorite button in the recipe card
+    const recipeCards = document.querySelectorAll('.recipe-card');
+    recipeCards.forEach(card => {
+        const button = card.querySelector('.favorite-btn i');
+        if (button && card.onclick.toString().includes(recipeId)) {
+            if (isActive) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        }
+    });
+}
+
+function updateFavoritesDisplay() {
+    const favorites = getFavorites();
+    const favoritesGrid = document.getElementById('favoritesGrid');
+    const noFavoritesMessage = document.getElementById('noFavoritesMessage');
+    
+    if (favorites.length === 0) {
+        favoritesGrid.innerHTML = '';
+        noFavoritesMessage.style.display = 'block';
+        return;
+    }
+    
+    noFavoritesMessage.style.display = 'none';
+    favoritesGrid.innerHTML = '';
+    
+    const favoriteRecipes = recipes.filter(recipe => favorites.includes(recipe.id));
+    
+    favoriteRecipes.forEach(recipe => {
+        const recipeCard = document.createElement('div');
+        recipeCard.className = 'recipe-card';
+        recipeCard.onclick = () => openRecipeModal(recipe.id);
+        
+        recipeCard.innerHTML = `
+            <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(${recipe.id})" title="Remove from favorites">
+                <i class="fas fa-heart active"></i>
+            </button>
+            <div class="recipe-image" style="background-image: url('${recipe.image}');"></div>
+            <div class="recipe-content">
+                <h3 class="recipe-title">${recipe.title}</h3>
+                <div class="recipe-meta">
+                    <span class="recipe-category">${recipe.category}</span>
+                    <div class="recipe-difficulty ${recipe.difficulty}">
+                        <i class="fas fa-star"></i>
+                        <span>${recipe.difficulty}</span>
+                    </div>
+                </div>
+                <div class="recipe-meta">
+                    <div class="recipe-time">
+                        <i class="fas fa-clock"></i>
+                        <span>${recipe.time}</span>
+                    </div>
+                    <div class="recipe-time">
+                        <i class="fas fa-users"></i>
+                        <span>${recipe.servings}</span>
+                    </div>
+                </div>
+                <p class="recipe-description">${recipe.description}</p>
+                <div class="recipe-actions">
+                    <button class="recipe-btn">View Recipe</button>
+                    <div class="recipe-time">
+                        <i class="fas fa-eye"></i>
+                        <span>Click to view</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        favoritesGrid.appendChild(recipeCard);
+    });
+}
+
 // Initialize Application
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
@@ -82,6 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function initializeApp() {
     displayRecipes(recipes);
+    updateFavoritesDisplay();
     setupMobileMenu();
 }
 
@@ -136,6 +259,9 @@ function displayRecipes(recipesToShow) {
         recipeCard.onclick = () => openRecipeModal(recipe.id);
         
         recipeCard.innerHTML = `
+            <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite(${recipe.id})" title="Add to favorites">
+                <i class="fas fa-heart ${isFavorite(recipe.id) ? 'active' : ''}"></i>
+            </button>
             <div class="recipe-image" style="background-image: url('${recipe.image}');"></div>
             <div class="recipe-content">
                 <h3 class="recipe-title">${recipe.title}</h3>
