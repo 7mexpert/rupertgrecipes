@@ -90,6 +90,44 @@
         </div>
     </div>
 
+    <!-- Recipe Guide Modal -->
+    <div id="recipeGuideModal" class="modal">
+        <div class="guide-container">
+            <!-- Progress Bar -->
+            <div class="guide-progress">
+                <div class="guide-header">
+                    <span class="guide-recipe-name">Recipe Name</span>
+                    <span class="guide-step-info">Step <span id="guide-current-step">1</span> of <span id="guide-total-steps">5</span></span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="guide-progress-fill"></div>
+                </div>
+            </div>
+            
+            <!-- Guide Content -->
+            <div class="guide-content">
+                <div class="guide-step-card" id="guide-step-card">
+                    <!-- Guide content will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Navigation -->
+            <div class="guide-navigation">
+                <button class="guide-btn guide-exit-btn" onclick="exitGuide()">
+                    <i class="fas fa-times"></i> Exit
+                </button>
+                <div class="guide-nav-buttons">
+                    <button class="guide-btn guide-back-btn" onclick="prevGuideStep()" id="guide-back-btn">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="guide-btn guide-next-btn" onclick="nextGuideStep()" id="guide-next-btn">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Recipe Submission Section -->
     <section id="recipeSubmission" class="recipe-submission-section">
         <div class="container">
