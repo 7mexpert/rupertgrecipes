@@ -30,20 +30,6 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Delicious Recipes Made Simple</h1>
-                <p>Discover amazing recipes with step-by-step instructions, perfect for home cooks and teachers alike.</p>
-                <div class="hero-buttons">
-                    <button class="btn-primary" onclick="scrollToSection('recipes')">Explore Recipes</button>
-                    <button class="btn-secondary" onclick="scrollToSection('recipeSubmission')">Submit Your Recipes</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Search and Filter Section -->
     <section class="search-section">
         <div class="container">
@@ -162,6 +148,22 @@
 
     <!-- Hidden elements for downloads -->
     <div id="printContent" style="display: none;"></div>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav">
+        <a href="#recipes" class="nav-link" data-section="recipes">
+            <i class="fas fa-book"></i>
+            <span>Recipes</span>
+        </a>
+        <a href="#favorites" class="nav-link" data-section="favorites">
+            <i class="fas fa-heart"></i>
+            <span>Favorites</span>
+        </a>
+        <a href="#recipeSubmission" class="nav-link" data-section="submit">
+            <i class="fas fa-envelope"></i>
+            <span>Submit</span>
+        </a>
+    </nav>
 
     <script src="script.js"></script>
 </body>
