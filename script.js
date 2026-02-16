@@ -1067,7 +1067,70 @@ document.addEventListener('DOMContentLoaded', function() {
             scrollToSection(targetId);
         });
     });
+    
+    // Initialize mobile bottom navigation
+    initMobileNavigation();
 });
+
+// Mobile Bottom Navigation Functions
+function initMobileNavigation() {
+    // Add click handlers for bottom nav links
+    const navLinks = document.querySelectorAll('.mobile-bottom-nav .nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            scrollToSection(targetId);
+        });
+    });
+    
+    // Add scroll listener to update active navigation
+    window.addEventListener('scroll', updateActiveNavigation);
+    
+    // Initial check
+    updateActiveNavigation();
+}
+
+function updateActiveNavigation() {
+    const sections = ['favorites', 'recipes', 'recipeSubmission'];
+    const currentScroll = window.scrollY;
+    const windowHeight = window.innerHeight;
+    
+    // Find which section is currently in view
+    for (let i = 0; i < sections.length; i++) {
+        const section = document.getElementById(sections[i]);
+        if (section) {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            
+            // Check if section is in view (with some offset)
+            if (currentScroll >= sectionTop - windowHeight / 3 && currentScroll < sectionTop + sectionHeight - windowHeight / 3) {
+                setActiveNavLink(sections[i]);
+                break;
+            }
+        }
+    }
+}
+
+function setActiveNavLink(sectionId) {
+    const navLinks = document.querySelectorAll('.mobile-bottom-nav .nav-link');
+    
+    navLinks.forEach(link => {
+        const linkSection = link.getAttribute('data-section');
+        
+        // Map data-section to actual section IDs
+        let actualSectionId = linkSection;
+        if (linkSection === 'submit') {
+            actualSectionId = 'recipeSubmission';
+        }
+        
+        if (actualSectionId === sectionId) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+}
 
 function setupMobileMenu() {
     const mobileToggle = document.querySelector('.mobile-menu-toggle');
