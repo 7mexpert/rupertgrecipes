@@ -29,44 +29,34 @@ const recipes = [
     },
     {
         id: 2,
-        title: "Vegetable Stir-Fry with Teriyaki Sauce",
-        category: "Lunch",
+        title: "Tomato Pasta Bake",
+        category: "Dinner",
         difficulty: "Medium",
-        time: "30 minutes",
-        servings: "4 servings",
-        image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=500&auto=format&fit=crop",
-        description: "A colorful and healthy stir-fry with crisp vegetables in a sweet and savory teriyaki sauce.",
+        time: "40 minutes",
+        servings: "2 servings",
+        image: "https://tse3.mm.bing.net/th/id/OIP.luMbyHYWAkmwh8xHA9nUzwHaLH?rs=1&pid=ImgDetMain&o=7&rm=3",
+        description: "A comforting tomato pasta bake with a cheesy crust. Perfect for a quick and satisfying dinner.",
         ingredients: [
-            { amount: "2 tbsp", item: "vegetable oil" },
-            { amount: "1", item: "red bell pepper, sliced" },
-            { amount: "1", item: "yellow bell pepper, sliced" },
-            { amount: "1 cup", item: "broccoli florets" },
-            { amount: "1 cup", item: "snap peas" },
-            { amount: "1", item: "carrot, julienned" },
-            { amount: "3 cloves", item: "garlic, minced" },
-            { amount: "1 tbsp", item: "fresh ginger, minced" },
-            { amount: "1/2 cup", item: "teriyaki sauce" },
-            { amount: "2 tbsp", item: "soy sauce" },
-            { amount: "1 tbsp", item: "cornstarch" },
-            { amount: "1/4 cup", item: "water" },
-            { amount: "2 cups", item: "cooked rice, for serving" },
-            { amount: "2", item: "green onions, sliced" }
+            { amount: "1 can", item: "tomatoes" },
+            { amount: "1 can", item: "any vegtables you like" },
+            { amount: "225g", item: "pasta" },
+            { amount: "1/2 slice", item: "bread" },
+            { amount: "35g", item: "cheese" }
         ],
         equipment: [
-            "Large wok or skillet",
-            "Cutting board and knife",
-            "Measuring cups and spoons",
-            "Small bowl for sauce",
-            "Spatula or tongs"
+            "Hob safe pan",
+            "Spoon for stirring",
+            "Cheese Grater",
+            "Drainer for pasta",
+            "Oven-safe baking dish"
         ],
         steps: [
-            "Heat oil in wok or large skillet over medium-high heat.",
-            "Add garlic and ginger, stir-fry for 30 seconds until fragrant.",
-            "Add bell peppers, broccoli, snap peas, and carrot. Stir-fry for 4-5 minutes until crisp-tender.",
-            "In a small bowl, whisk together teriyaki sauce, soy sauce, cornstarch, and water.",
-            "Pour sauce mixture over vegetables, stirring constantly until sauce thickens, about 2-3 minutes.",
-            "Serve immediately over cooked rice.",
-            "Garnish with sliced green onions."
+            "Put some pasta on the hob until it is cooked.",
+            "Whilst the pasta is cooking, grate the cheese and bread to make the topping.",
+            "Once pasta is cooked, drain it and put it back in the pan, then add the can of tomatoes and any vegtables you like.",
+            "Leave the pasta on for 5 minutes, stirring occasionally, until the sauce has thickened slightly.",
+            "Take of heat and pour the pasta into an oven-safe dish, then sprinkle the cheese and bread mixture on top.",
+            "Place in the oven or grill until the topping is golden and crispy."
         ]
     }
 ];
